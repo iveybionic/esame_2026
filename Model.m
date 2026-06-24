@@ -23,7 +23,7 @@ classdef Model
         
         function targetQ(model, ee_target)
     
-        p = init_plot();
+        p = model.init_plot();
         % Update target marker
         p.mark_target(ee_target)
     
@@ -31,7 +31,7 @@ classdef Model
         % Inverse kinematics
         %-------------------------------------------------------
     
-        qTarget = inverseKinematics2R(ee_target);
+        qTarget = model.inverseKinematics2R(ee_target);
     
         %-------------------------------------------------------
         % Run Simulink model
@@ -53,7 +53,7 @@ classdef Model
         %-------------------------------------------------------
     
         % PLACEHOLDER: IK
-        [t,q1,q2] = fakeModel(qTarget);
+        [t,q1,q2] = model.fakeModel(qTarget);
     
         % Animate
         p.animate(t,q1,q2)
