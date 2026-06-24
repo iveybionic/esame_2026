@@ -1,65 +1,64 @@
 classdef Model
     properties
         name = "SEA_2R_Model";
-        params
+        geometry
+        tau
         ddq
         dq
         q
+        ddtheta
+        dtheta
         theta
     end
 
     methods
-        function model = Model(params)
-            model.params = params;
-            model.ddq = [0 0]';
-            model.dq = params.dq_0;
-            model.q = params.q_0;
-            model.theta = params.theta_0;
+        function model = Model(init)
+            model.tau = init.tau;
+            model.ddq = init.ddq;
+            model.dq = init.dq;
+            model.q = init.q;
+            model.ddtheta = init.ddtheta;
+            model.dtheta = init.dtheta;
+            model.theta = init.theta;
+
+            model.geometry = init.geometry;
         end
 
         function p = init_plot(model)
-            p = ModelPlot(model.params);
+            p = PlotArm(model.geometry);
         end
         
-        function targetQ(model, ee_target)
+        function targetQ(model, ee_target, p)
     
-        p = model.init_plot();
+        if nargin < 3
+            p = model.init_plot();
+        end
+
         % Update target marker
         p.mark_target(ee_target)
     
         %-------------------------------------------------------
-        % Inverse kinematics
-        %-------------------------------------------------------
-    
-        qTarget = model.inverseKinematics2R(ee_target);
-    
-        %-------------------------------------------------------
         % Run Simulink model
         %-------------------------------------------------------
-    
-        %
-        % Simulink Goes Here:
-        %
-        % simIn = Simulink.SimulationInput(modelName);
-        %
-        % simIn = simIn.setVariable('q_target',qTarget);
-        %
-        % out = sim(simIn);
-        %
-        % dq = out.dq.Data;
-        % q  = out.q.Data;
-        % t  = out.tout;
+
+        simIn = Simulink.SimulationInput("dinamici");
+        
+        simIn = simIn.setVariable('q',model.q);
+        simIn = simIn.setVariable('theta',model.theta);
+        simIn = simIn.setVariable('tau',model.tau);
+
+        out = sim(simIn);
+        qq = squeeze(out.yout{1}.Values.Data);
+        t  = out.tout;
         %
         %-------------------------------------------------------
     
         % PLACEHOLDER: IK
-        [t,q1,q2] = model.fakeModel(qTarget);
+        % [t,q1,q2] = model.fakeModel(qTarget);
     
         % Animate
-        p.animate(t,q1,q2)
-    
-        model.q = [q1 q2]';
-    
+        p.animate(t,qq(1,:),qq(2,:));
+        
         % threshold = 1e-1;
         % if all(abs([q1 q2] - qTarget) < threshold)
         %     return
@@ -71,8 +70,8 @@ classdef Model
     
         x = ee_target(1);
         y = ee_target(2);
-        l1 = model.params.l1;
-        l2 = model.params.l2;
+        l1 = model.geometry.l1;
+        l2 = model.geometry.l2;
 
         % trigonometria
         c2 = (x^2+y^2-l1^2-l2^2)/(2*l1*l2);

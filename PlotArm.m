@@ -1,6 +1,6 @@
-classdef ModelPlot
+classdef PlotArm
     properties
-        params
+        geometry
         hLink1
         hLink2
         hJoint
@@ -10,12 +10,12 @@ classdef ModelPlot
     end
 
     methods
-        function obj = ModelPlot(p)
+        function obj = PlotArm(geometry)
             if nargin ~= 1
                 error("Must input param struct");
             end
 
-            obj.params = p;
+            obj.geometry = geometry;
 
             figure;
             ax = gca;
@@ -30,7 +30,7 @@ classdef ModelPlot
             obj.hTrajectory = animatedline(ax, 'Color',[0 .5 0],'LineWidth',1.5);
             obj.hTarget = plot(ax, NaN,NaN,'rx','MarkerSize',14,'LineWidth',2);
 
-            R = obj.params.l1 + obj.params.l2 + 0.2;
+            R = obj.geometry.l1 + obj.geometry.l2 + 0.2;
             xlim(ax,[-R*1.5 R*1.5])
             ylim(ax,[-R R])
 
@@ -47,11 +47,11 @@ classdef ModelPlot
                 theta1 = q1(k);
                 theta2 = q2(k);
 
-                x1 = obj.params.l1*cos(theta1);
-                y1 = obj.params.l1*sin(theta1);
+                x1 = obj.geometry.l1*cos(theta1);
+                y1 = obj.geometry.l1*sin(theta1);
 
-                x2 = x1 + obj.params.l2*cos(theta1+theta2);
-                y2 = y1 + obj.params.l2*sin(theta1+theta2);
+                x2 = x1 + obj.geometry.l2*cos(theta1+theta2);
+                y2 = y1 + obj.geometry.l2*sin(theta1+theta2);
 
                 set(obj.hLink1,'XData',[0 x1],'YData',[0 y1]);
                 set(obj.hLink2,'XData',[x1 x2],'YData',[y1 y2]);
@@ -62,7 +62,7 @@ classdef ModelPlot
                 addpoints(obj.hTrajectory,x2,y2)
 
                 drawnow limitrate
-                pause(.005)
+                pause(0)
             end
 
         end
