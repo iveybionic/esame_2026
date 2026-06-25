@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:d="http://www.mathworks.com/blockgraphics" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" id="svg" width="300" height="150" d:options="PreserveAspect:On;Rotate:Off;Resize:FitToBlock;">
+
+	<g id="part_1" title="part_0" ie-ports="left:simulink,top:,right:simulink,bottom:">
+		<math id="equation" height="158" width="242" class="equation" style="font-size:40px; scalingFactors:0.7" x="106.88" y="58.38">
+			$$\frac{\bar{\omega}^2_n}{s^2+2\zeta\bar{\omega}_n+\bar{\omega}^2_n}
+			$$		</math>
+	</g>
+</svg>

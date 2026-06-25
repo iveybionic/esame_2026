@@ -21,6 +21,11 @@ params.K_s = [50.0 0; 0 40.0];
 % costante gravitazionale (m/s^2)
 params.g = 9.81;
 
+% Parametri scelti arbitrariamente (Esempio di valori sensati per XX, YY, ZZ)
+params.wn    = 30;     % rad/s (Frequenza naturale attuatore)
+params.zeta  = 0.7;    % Smorzamento nominale attuatore
+params.tau_d = 0.005;  % secondi (Ritardo di trasporto - 5 ms)
+
 %% Condizioni iniziali
 init.ddq = [0; 0];
 init.dq = [0; 0];

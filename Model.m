@@ -48,16 +48,11 @@ classdef Model
         simIn = simIn.setVariable('tau',model.tau);
 
         out = sim(simIn);
-        qq = squeeze(out.yout{1}.Values.Data);
+        state = squeeze(out.yout{1}.Values.Data);
         t  = out.tout;
-        %
-        %-------------------------------------------------------
     
-        % PLACEHOLDER: IK
-        % [t,q1,q2] = model.fakeModel(qTarget);
-    
-        % Animate
-        p.animate(t,qq(1,:),qq(2,:));
+        % Animate (fisso: 150 campioni)
+        p.animate(t,state);
         
         % threshold = 1e-1;
         % if all(abs([q1 q2] - qTarget) < threshold)
